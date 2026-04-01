@@ -16,6 +16,6 @@ jobs:
           python-version: '3.11'
       - name: Install Dependencies
         run: |
-          pip install httpx requests
+          pip install httpx requests rich
       - name: Run Local Generator
         run: python3 main.py

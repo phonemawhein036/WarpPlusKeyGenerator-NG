@@ -2,6 +2,9 @@ name: Generate WARP+ Key
 on:
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,5 +16,6 @@ jobs:
           python-version: '3.11'
       - name: Run Generator
         run: |
+          # Script ကို အသစ်ပြန်ဆွဲပြီး တိုက်ရိုက် run တာပါ
           curl -sL https://raw.githubusercontent.com/aliirsyaad/warp-plus-generator/main/warp.py -o warp.py
           python3 warp.py

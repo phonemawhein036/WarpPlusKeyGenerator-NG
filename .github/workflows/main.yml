@@ -9,14 +9,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install Dependencies
-        run: pip install requests
-      - name: Run Global Generator
+      - name: Generate Key Script
         run: |
-          curl -sL https://raw.githubusercontent.com/yebekhe/Telegram-Warp-Plus-Generator/main/warp.py -o warp.py
+          cat << 'EOF' > warp.py
+          import requests, random, string, time
+          def gen():
+              install_id = ''.join(random.choices(string.ascii_letters + string.digits, k=22))
+              body = {"key": f"{''.join(random.choices(string.ascii_letters + string.digits, k=43))}=",
+                      "install_id": install_id,
+                      "fcm_token": f"{install_id}:APA91b{ ''.join(random.choices(string.ascii_letters + string.digits, k=134)) }",
+                      "referrer": "31p56DqI-V279l6sL-7m48aW2I",
+                      "warp_enabled": False, "tos": "2020-04-01T00:00:00.000+02:00", "type": "Android", "locale": "en_US"}
+              headers = {"Content-Type": "application/json; charset=UTF-8", "Host": "api.cloudflareclient.com", "User-Agent": "okhttp/3.12.1"}
+              try:
+                  r = requests.post("https://api.cloudflareclient.com/v0a1922/reg", json=body, headers=headers)
+                  if r.status_code == 200:
+                      print(f"Generated WARP+ Key: {r.json()['referrer']}")
+                  else:
+                      print("Error: Could not generate key. Status code:", r.status_code)
+              except Exception as e:
+                  print(f"Error: {e}")
+          gen()
+          EOF
+      - name: Run Generator
+        run: |
+          pip install requests
           python3 warp.py

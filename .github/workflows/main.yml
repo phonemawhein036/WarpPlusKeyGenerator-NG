@@ -15,7 +15,8 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install Dependencies
+        run: pip install requests
+      - name: Run Global Generator
         run: |
-          pip install httpx requests rich
-      - name: Run Local Generator
-        run: python3 main.py
+          curl -sL https://raw.githubusercontent.com/yebekhe/Telegram-Warp-Plus-Generator/main/warp.py -o warp.py
+          python3 warp.py
